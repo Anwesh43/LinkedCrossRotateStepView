@@ -40,7 +40,7 @@ fun Canvas.drawCRSNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     paint.strokeWidth = Math.min(w, h) / 60
-    paint.color = color 
+    paint.color = color
     paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(gap * (i + 1), h/2)
@@ -61,6 +61,8 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
 
     private val renderer : Renderer = Renderer(this)
 
+    var onAnimationCompleteListener : OnAnimationCompleteListener? = null
+
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
     }
@@ -72,6 +74,10 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
             }
         }
         return true
+    }
+
+    fun addOnAnimationCompleteListener(onComplete : (Int) -> Unit, onReset : (Int) -> Unit) {
+        onAnimationCompleteListener = OnAnimationCompleteListener(onComplete, onReset)
     }
 
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
@@ -205,6 +211,10 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
             animator.animate {
                 crs.update {i, scl ->
                     animator.stop()
+                    when(scl) {
+                        0f -> view.onAnimationCompleteListener?.onReset?.invoke(i)
+                        1f -> view.onAnimationCompleteListener?.onComplete?.invoke(i)
+                    }
                 }
             }
         }
@@ -223,4 +233,6 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
             return view
         }
     }
+
+    data class OnAnimationCompleteListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 }
