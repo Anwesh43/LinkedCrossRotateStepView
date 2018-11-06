@@ -19,6 +19,8 @@ val lines : Int = 4
 
 val scGap : Float = 0.05f
 
+val color : Int = Color.parseColor("#3D5AFE")
+
 fun Int.getInverse() : Float = (1f / this)
 
 fun Float.getScaleFactor() : Float = Math.floor(this / 0.5).toFloat()
@@ -34,11 +36,12 @@ fun Canvas.drawCRSNode(i : Int, scale : Float, paint : Paint) {
     val h : Float = height.toFloat()
     val gap : Float = w / (nodes + 1)
     val size : Float = gap / 3
-    val deg : Float = 360f / nodes
+    val deg : Float = 360f / lines
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     paint.strokeWidth = Math.min(w, h) / 60
-    paint.color = Color.parseColor("#4CAF50")
+    paint.color = color 
+    paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(gap * (i + 1), h/2)
     rotate(deg * sc2)
@@ -140,7 +143,7 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
 
         fun draw(canvas : Canvas, paint : Paint) {
             canvas.drawCRSNode(i, state.scale, paint)
-            next?.draw(canvas, paint)
+            prev?.draw(canvas, paint)
         }
 
         fun update(cb : (Int, Float) -> Unit) {
