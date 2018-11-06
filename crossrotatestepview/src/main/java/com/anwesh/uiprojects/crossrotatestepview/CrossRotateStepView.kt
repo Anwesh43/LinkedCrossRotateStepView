@@ -36,6 +36,7 @@ fun Canvas.drawCRSNode(i : Int, scale : Float, paint : Paint) {
     val deg : Float = 360f / nodes
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
+    paint.strokeWidth = Math.min(w, h) / 60
     paint.color = Color.parseColor("#4CAF50")
     save()
     translate(gap * (i + 1), h/2)
@@ -48,4 +49,22 @@ fun Canvas.drawCRSNode(i : Int, scale : Float, paint : Paint) {
         restore()
     }
     restore()
+}
+
+class CrossRotateStepView(ctx : Context) : View(ctx) {
+
+    private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
 }
