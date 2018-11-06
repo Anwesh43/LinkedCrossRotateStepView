@@ -212,4 +212,12 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : CrossRotateStepView {
+            val view : CrossRotateStepView = CrossRotateStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
