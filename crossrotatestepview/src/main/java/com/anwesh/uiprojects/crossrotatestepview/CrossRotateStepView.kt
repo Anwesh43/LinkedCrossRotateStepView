@@ -187,4 +187,27 @@ class CrossRotateStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : CrossRotateStepView) {
+
+        private val crs : CrossRotateStep = CrossRotateStep(0)
+
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            crs.draw(canvas, paint)
+            animator.animate {
+                crs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            crs.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
